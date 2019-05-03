@@ -1,0 +1,6 @@
+[submodule "Elastos.ELA.SPV.Cpp"]
+	path = Elastos.ELA.SPV.Cpp
+	url = git@github.com:elastos/Elastos.ELA.SPV.Cpp.git
+[submodule "pybind11"]
+	path = pybind11
+	url = git@github.com:pybind/pybind11.git
