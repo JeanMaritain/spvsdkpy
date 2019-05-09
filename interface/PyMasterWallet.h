@@ -1,7 +1,12 @@
+// Copyright (c) 2012-2018 The Elastos Open Source Project
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef SPVPY_PYMASTERWALLET_H
 #define SPVPY_PYMASTERWALLET_H
 
 #include <IMasterWallet.h>
+#include "PySubWallet.h"
 
 using namespace Elastos::ElaWallet;
 
@@ -9,7 +14,7 @@ class PyMasterWallet {
 public:
     PyMasterWallet();
 
-    PyMasterWallet(IMasterWallet *masterWallet);
+    explicit PyMasterWallet(IMasterWallet *masterWallet);
 
     /**
      * Virtual destructor.
@@ -20,7 +25,7 @@ public:
      * Get the master wallet id.
      * @return master wallet id.
      */
-    virtual std::string GetId() const;
+    virtual std::string GetID() const;
 
     /**
      * Here is a example of standard wallet basic info:
@@ -54,7 +59,7 @@ public:
      * Get wallet existing sub wallets.
      * @return existing sub wallets by array.
      */
-    virtual std::vector<ISubWallet *> GetAllSubWallets() const;
+    virtual std::vector<PySubWallet> GetAllSubWallets() const;
 
     /**
      * Create a sub wallet by specifying wallet type.
@@ -62,7 +67,7 @@ public:
      * @param feePerKb specify fee per kb to calculate fee by size of transaction. Fee per key default set to zero so that sub wallet will calculate by default "fee rate".
      * @return If success will return a pointer of sub wallet interface.
      */
-    virtual ISubWallet *CreateSubWallet(
+    virtual PySubWallet CreateSubWallet(
             const std::string &chainID,
             uint64_t feePerKb = 0);
 
@@ -70,7 +75,7 @@ public:
      * Destroy a sub wallet created by the master wallet.
      * @param wallet sub wallet object, should created by the master wallet.
      */
-    virtual void DestroyWallet(ISubWallet *wallet);
+    virtual void DestroyWallet(const PySubWallet &subWallet);
 
     /**
      * Get public key of the root private key belongs to the master wallet.

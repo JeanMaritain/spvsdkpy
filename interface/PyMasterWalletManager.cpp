@@ -36,14 +36,20 @@ PyMasterWallet PyMasterWalletManager::CreateMasterWallet(const std::string &mast
 
 PyMasterWallet PyMasterWalletManager::CreateMultiSignMasterWalletReadOnly(const std::string &masterWalletId,
         const std::string &coSigners, uint32_t requiredSignCount) {
-    return PyMasterWallet(_mwm->CreateMultiSignMasterWallet(masterWalletId, coSigners, requiredSignCount));
+    return PyMasterWallet(_mwm->CreateMultiSignMasterWallet(masterWalletId,
+                                                            nlohmann::json::parse(coSigners),
+                                                            requiredSignCount));
 }
 
 PyMasterWallet PyMasterWalletManager::CreateMultiSignMasterWallet(const std::string &masterWalletId, const std::string &mnemonic,
                                                    const std::string &phrasePassword, const std::string &payPassword,
                                                    const std::string &coSigners, uint32_t requiredSignCount) {
-    IMasterWallet *ptr = _mwm->CreateMultiSignMasterWallet(masterWalletId, mnemonic, phrasePassword, payPassword,
-            coSigners, requiredSignCount);
+    IMasterWallet *ptr = _mwm->CreateMultiSignMasterWallet(masterWalletId,
+                                                           mnemonic,
+                                                           phrasePassword,
+                                                           payPassword,
+                                                           nlohmann::json::parse(coSigners),
+                                                           requiredSignCount);
     return PyMasterWallet(ptr);
 }
 

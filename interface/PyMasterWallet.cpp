@@ -8,46 +8,52 @@ PyMasterWallet::PyMasterWallet(IMasterWallet *masterWallet) :
         _masterWallet(masterWallet) {
 }
 
-std::string PyMasterWallet::GetId() const {
-    return std::string();
+std::string PyMasterWallet::GetID() const {
+    return _masterWallet->GetId();
 }
 
 std::string PyMasterWallet::GetBasicInfo() const {
     return _masterWallet->GetBasicInfo().dump();
 }
 
-std::vector<ISubWallet *> PyMasterWallet::GetAllSubWallets() const {
-    return std::vector<ISubWallet *>();
+std::vector<PySubWallet> PyMasterWallet::GetAllSubWallets() const {
+    std::vector<ISubWallet *> subWallets = _masterWallet->GetAllSubWallets();
+    std::vector<PySubWallet> pySubWalelts;
+
+    for (size_t i = 0; i < subWallets.size(); ++i)
+        pySubWalelts.push_back(PySubWallet(subWallets[i]));
+
+    return pySubWalelts;
 }
 
-ISubWallet *PyMasterWallet::CreateSubWallet(const std::string &chainID, uint64_t feePerKb) {
-    return nullptr;
+PySubWallet PyMasterWallet::CreateSubWallet(const std::string &chainID, uint64_t feePerKb) {
+    return PySubWallet(_masterWallet->CreateSubWallet(chainID, feePerKb));
 }
 
-void PyMasterWallet::DestroyWallet(ISubWallet *wallet) {
-
+void PyMasterWallet::DestroyWallet(const PySubWallet &subWallet) {
+    return _masterWallet->DestroyWallet(subWallet.GetRaw());
 }
 
 std::string PyMasterWallet::GetPublicKey() const {
-    return std::string();
+    return _masterWallet->GetPublicKey();
 }
 
 std::string PyMasterWallet::Sign(const std::string &message, const std::string &payPassword) {
-    return std::string();
+    return _masterWallet->Sign(message, payPassword);
 }
 
 bool PyMasterWallet::CheckSign(const std::string &publicKey, const std::string &message, const std::string &signature) {
-    return false;
+    return _masterWallet->CheckSign(publicKey, message, signature);
 }
 
 bool PyMasterWallet::IsAddressValid(const std::string &address) const {
-    return false;
+    return _masterWallet->IsAddressValid(address);
 }
 
 std::vector<std::string> PyMasterWallet::GetSupportedChains() const {
-    return std::vector<std::string>();
+    return _masterWallet->GetSupportedChains();
 }
 
 void PyMasterWallet::ChangePassword(const std::string &oldPassword, const std::string &newPassword) {
-
+    _masterWallet->ChangePassword(oldPassword, newPassword);
 }
