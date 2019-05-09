@@ -53,46 +53,51 @@ PyMasterWallet PyMasterWalletManager::CreateMultiSignMasterWallet(const std::str
     return PyMasterWallet(ptr);
 }
 
-std::vector<IMasterWallet *> PyMasterWalletManager::GetAllMasterWallets() const {
-    return _mwm->GetAllMasterWallets();
+std::vector<PyMasterWallet> PyMasterWalletManager::GetAllMasterWallets() const {
+	std::vector<PyMasterWallet> pyMasterWallets;
+	std::vector<IMasterWallet *> masterWallets = _mwm->GetAllMasterWallets();
+	for (size_t i = 0; i < masterWallets.size(); ++i) {
+	    pyMasterWallets.push_back(PyMasterWallet(masterWallets[i]));
+	}
+    return pyMasterWallets;
 }
 
 std::vector<std::string> PyMasterWalletManager::GetAllMasterWalletIds() const {
     return _mwm->GetAllMasterWalletIds();
 }
 
-IMasterWallet *PyMasterWalletManager::GetWallet(const std::string &masterWalletId) const {
-    return _mwm->GetWallet(masterWalletId);
+PyMasterWallet PyMasterWalletManager::GetWallet(const std::string &masterWalletId) const {
+    return PyMasterWallet(_mwm->GetWallet(masterWalletId));
 }
 
 void PyMasterWalletManager::DestroyWallet(const std::string &masterWalletId) {
     return _mwm->DestroyWallet(masterWalletId);
 }
 
-IMasterWallet *
+PyMasterWallet
 PyMasterWalletManager::ImportWalletWithKeystore(const std::string &masterWalletId, const std::string &keystoreContent,
                                                 const std::string &backupPassword, const std::string &payPassword) {
     nlohmann::json keystore = nlohmann::json::parse(keystoreContent);
-    return _mwm->ImportWalletWithKeystore(masterWalletId, keystore, backupPassword, payPassword);
+    return PyMasterWallet(_mwm->ImportWalletWithKeystore(masterWalletId, keystore, backupPassword, payPassword));
 }
 
-IMasterWallet *
+PyMasterWallet
 PyMasterWalletManager::ImportWalletWithMnemonic(const std::string &masterWalletId, const std::string &mnemonic,
                                                 const std::string &phrasePassword, const std::string &payPassword,
                                                 bool singleAddress) {
-    return _mwm->ImportWalletWithMnemonic(masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress);
+    return PyMasterWallet(_mwm->ImportWalletWithMnemonic(masterWalletId, mnemonic, phrasePassword, payPassword, singleAddress));
 }
 
 std::string
-PyMasterWalletManager::ExportWalletWithKeystore(IMasterWallet *masterWallet, const std::string &backupPassword,
+PyMasterWalletManager::ExportWalletWithKeystore(const PyMasterWallet &masterWallet, const std::string &backupPassword,
                                                 const std::string &payPassword, bool withPrivKey) const {
 
-    return _mwm->ExportWalletWithKeystore(masterWallet, backupPassword, payPassword, withPrivKey).dump();
+    return _mwm->ExportWalletWithKeystore(masterWallet.GetRaw(), backupPassword, payPassword, withPrivKey).dump();
 }
 
 std::string
-PyMasterWalletManager::ExportWalletWithMnemonic(IMasterWallet *masterWallet, const std::string &payPassword) const {
-    return _mwm->ExportWalletWithMnemonic(masterWallet, payPassword);
+PyMasterWalletManager::ExportWalletWithMnemonic(const PyMasterWallet &masterWallet, const std::string &payPassword) const {
+    return _mwm->ExportWalletWithMnemonic(masterWallet.GetRaw(), payPassword);
 }
 
 std::string PyMasterWalletManager::GetVersion() const {

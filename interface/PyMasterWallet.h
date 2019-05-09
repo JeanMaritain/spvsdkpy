@@ -21,6 +21,9 @@ public:
      */
     virtual ~PyMasterWallet() noexcept {}
 
+    IMasterWallet *GetRaw() const {
+        return _masterWallet;
+    }
     /**
      * Get the master wallet id.
      * @return master wallet id.

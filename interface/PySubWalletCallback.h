@@ -10,7 +10,7 @@
 
 class PySubWalletCallback : IPySubWalletCallback {
 public:
-	PySubWalletCallback() {}
+	using IPySubWalletCallback::IPySubWalletCallback;
 
 	~PySubWalletCallback() {}
 	/**
@@ -20,17 +20,20 @@ public:
 	 * @param desc is an detail description of transaction status.
 	 * @param confirms is confirm count util this callback fired.
 	 */
-	 // FIXME complete here
-	 virtual void OnTransactionStatusChanged(
-		 const std::string &txid,
+	 void OnTransactionStatusChanged(
+		 const std::string &txHash,
 		 const std::string &status,
 		 const std::string &desc,
-		 uint32_t confirms) {}
+		 uint32_t confirms) override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnTransactionStatusChanged, txHash, status, desc, confirms);
+	 }
 
 	/**
 	 * Callback method fired when block begin synchronizing with a peer. This callback could be used to show progress.
 	 */
-	virtual void OnBlockSyncStarted() {}
+	void OnBlockSyncStarted() override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnBlockSyncStarted);
+	}
 
 	/**
 	 * Callback method fired when best block chain height increased. This callback could be used to show progress.
@@ -38,20 +41,32 @@ public:
 	 * @param estimatedHeight is max height of blockchain.
 	 * @param lastBlockTime timestamp of the last block.
 	 */
-	virtual void OnBlockSyncProgress(uint32_t currentBlockHeight, uint32_t estimatedHeight, time_t lastBlockTime) {}
+	void OnBlockSyncProgress(uint32_t currentBlockHeight, uint32_t estimatedHeight, time_t lastBlockTime) override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnBlockSyncProgress, currentBlockHeight, estimatedHeight, lastBlockTime);
+	}
 
 	/**
 	 * Callback method fired when block end synchronizing with a peer. This callback could be used to show progress.
 	 */
-	virtual void OnBlockSyncStopped() {}
+	void OnBlockSyncStopped() override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnBlockSyncStopped);
+	}
 
-	virtual void OnBalanceChanged(const std::string &asset, const std::string &balance) {}
+	void OnBalanceChanged(const std::string &asset, const std::string &balance) override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnBalanceChanged, asset, balance);
+	}
 
-	virtual void OnTxPublished(const std::string &hash, const std::string &result) {}
+	void OnTxPublished(const std::string &hash, const std::string &result) override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnTxPublished, hash, result);
+	}
 
-	virtual void OnTxDeleted(const std::string &hash, bool notifyUser, bool recommendRescan) {}
+	void OnTxDeleted(const std::string &hash, bool notifyUser, bool recommendRescan) override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnTxDeleted, hash, notifyUser, recommendRescan);
+	}
 
-	virtual void OnAssetRegistered(const std::string &asset, const std::string &info) {}
+	void OnAssetRegistered(const std::string &asset, const std::string &info) override {
+		PYBIND11_OVERLOAD_PURE(void, IPySubWalletCallback, OnAssetRegistered, asset, info);
+	}
 };
 
 

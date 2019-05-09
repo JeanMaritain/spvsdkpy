@@ -1,21 +1,35 @@
 import spvsdkpy as spv
+import SubWalletCallback as cb
+import time
+
+def CreateWallet(manager):
+    mnemonic = manager.GenerateMnemonic("english")
+    masterWallet = manager.CreateMasterWallet(
+        masterWalletId='MasterWalletID',
+        mnemonic=mnemonic,
+        phrasePassword='jkl;jkl;',
+        payPassword='asdfasdf',
+        singleAddress=False)
+
+    subWallet = masterWallet.CreateSubWallet("ELA", 10000)
+
+    return masterWallet
+
 def test_spvpy():
-    print(spv)
-    M = spv.PyMasterWalletManager("./Data")
-    mne = M.GenerateMnemonic("english")
-    print(mne)
+    manager = spv.PyMasterWalletManager("./Data")
+    masterWallets = manager.GetAllMasterWallets()
 
-    mw = M.CreateMasterWallet(
-         masterWalletId='MasterWalletID',
-         mnemonic=mne,
-         phrasePassword='jkl;jkl;',
-         payPassword='asdfasdf',
-         singleAddress=False
-     )
+    if len(masterWallets) == 0:
+        masterWallet = CreateWallet(manager)
+        masterWallets[0] = masterWallet
 
-    print(mw)
-    info = mw.GetBasicInfo()
-    print(info)
+    callback = cb.SubWalletCallback()
+    for mWallet in masterWallets:
+        subWallets = mWallet.GetAllSubWallets()
+        for subWallet in subWallets:
+            subWallet.AddCallback(callback)
+
+    time.sleep(120)
 
 test_spvpy()
 
