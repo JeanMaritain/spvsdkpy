@@ -52,7 +52,6 @@ void PySubWallet::AddCallback(IPySubWalletCallback *callback) {
 							   "subWallet callback have already registered");
 	}
 	_subCallback = new SubWalletCallback(callback);
-	printf("add callback = %p, %p\n", callback, _subCallback);
 	_subWallet->AddCallback(_subCallback);
 }
 
