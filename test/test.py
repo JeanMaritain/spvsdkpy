@@ -21,7 +21,7 @@ def test_spvpy():
 
     if len(masterWallets) == 0:
         masterWallet = CreateWallet(manager)
-        masterWallets[0] = masterWallet
+        masterWallets.append(masterWallet)
 
     callback = cb.SubWalletCallback()
     for mWallet in masterWallets:
@@ -29,7 +29,7 @@ def test_spvpy():
         for subWallet in subWallets:
             subWallet.AddCallback(callback)
 
-    time.sleep(120)
+    time.sleep(20)
 
 test_spvpy()
 
