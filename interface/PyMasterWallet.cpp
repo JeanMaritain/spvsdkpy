@@ -1,3 +1,4 @@
+#include <iostream>
 #include "PyMasterWallet.h"
 
 PyMasterWallet::PyMasterWallet() :

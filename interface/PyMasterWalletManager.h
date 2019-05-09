@@ -91,7 +91,7 @@ public:
      * Get manager existing master wallets.
      * @return existing master wallet array.
      */
-    virtual std::vector<IMasterWallet *> GetAllMasterWallets() const;
+    virtual std::vector<PyMasterWallet> GetAllMasterWallets() const;
 
     /**
      * Get manager available master wallet ids.
@@ -104,7 +104,7 @@ public:
      * @param masterWalletId master wallet id.
      * @return master wallet object.
      */
-    virtual IMasterWallet *GetWallet(
+    virtual PyMasterWallet GetWallet(
             const std::string &masterWalletId) const;
 
     /**
@@ -123,7 +123,7 @@ public:
      * @param phrasePassword combine with random seed to generate root key and chain code. Phrase password can be empty or between 8 and 128, otherwise will throw invalid argument exception.
      * @return If success will return a pointer of master wallet interface.
      */
-    virtual IMasterWallet *ImportWalletWithKeystore(
+    virtual PyMasterWallet ImportWalletWithKeystore(
             const std::string &masterWalletId,
             const std::string &keystoreContent,
             const std::string &backupPassword,
@@ -139,7 +139,7 @@ public:
      * @param language specify language of mnemonic. Language should not be empty, and exit corresponding language config file under the root path. The config begin with fixed prefix "mnemonic_" and end with ".txt" extension, for example mnemonic of Chinese config will be "mnemonic_chinese.txt".
      * @return If success will return a pointer of master wallet interface.
      */
-    virtual IMasterWallet *ImportWalletWithMnemonic(
+    virtual PyMasterWallet ImportWalletWithMnemonic(
             const std::string &masterWalletId,
             const std::string &mnemonic,
             const std::string &phrasePassword,
@@ -155,7 +155,7 @@ public:
      * @return If success will return key store content in json format.
      */
     virtual std::string ExportWalletWithKeystore(
-            IMasterWallet *masterWallet,
+            const PyMasterWallet &masterWallet,
             const std::string &backupPassword,
             const std::string &payPassword,
             bool withPrivKey) const;
@@ -167,7 +167,7 @@ public:
      * @return If success will return the mnemonic of master wallet.
      */
     virtual std::string ExportWalletWithMnemonic(
-            IMasterWallet *masterWallet,
+            const PyMasterWallet &masterWallet,
             const std::string &payPassword) const;
 
     virtual std::string GetVersion() const;
