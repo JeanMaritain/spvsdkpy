@@ -246,7 +246,7 @@ PYBIND11_MODULE(spvsdkpy, m){
                  "payPassword"_a,
                  "singleAddress"_a)
             .def("ExportWalletWithKeystore", &PyMasterWalletManager::ExportWalletWithKeystore,
-                 "masterWalletId"_a,
+                 "masterWallet"_a,
                  "backupPassword"_a,
                  "payPassword"_a,
                  "withPrivKey"_a)
